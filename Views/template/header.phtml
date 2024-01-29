@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Dark mode because its objectively better -->
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/my-style.css" rel="stylesheet">
+
+    <script defer src="js/github.js"></script>
+
+    <title>HackCamp: <?php echo $view->pageTitle; ?></title>
+</head>
+
+<body class="d-flex flex-column h-100">
+<!-- <body role="document"> -->
+<header class="navigation">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="index.php">HackCamp 23</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="redOcelotCommitMessages.php">Red Ocelot Commit Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="openBarazaCommitMessages.php">Open Baraza Commit Messages</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+
+    <div class="container">
+
+        <div class="row">
+            <section id="content">

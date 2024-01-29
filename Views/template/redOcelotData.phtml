@@ -1,0 +1,146 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h2>Red Ocelot Data</h2>
+
+<?php
+// Include necessary classes
+require_once('Models/Database.php');
+require_once('Models/commits.php');
+require_once('Models/commitsDataSet.php');
+
+
+// Instantiate commitsDataSet
+$commitsData = new Models\commitsDataSet();
+
+// Fetch all commits from the database
+$allCommits = $commitsData->fetchAllCommitsWithBuckets();
+
+$quarters = [];
+$commitCounts = [];
+
+foreach ($allCommits as $row) {
+    $quarters[] = $row['quarter_bucket'];
+    $commitCounts[] = $row['total_value'];
+}
+
+// Pass the data to the frontend
+$userCommitJSON = json_encode([
+    'quarters' => $quarters,
+    'commitCounts' => $commitCounts,
+]); ?>
+<!-- User Commit History -->
+<h3>User Commit History</h3>
+<h4>Displays the Number of Commits per quarter</h4>
+<h6>Disclaimer: quarters where no commits occurred are omitted from the graphs</h6>
+<div class="chart-container">
+    <canvas id="commitChart"></canvas>
+</div>
+
+<script>
+    // Parse PHP data in JavaScript
+    var chartData = <?php echo $userCommitJSON; ?>;
+
+    // Create the bar chart
+    var ctx = document.getElementById('commitChart').getContext('2d');
+    var commitChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.quarters,
+            datasets: [{
+                label: 'Number of Commits',
+                data: chartData.commitCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Filesize Breakdown -->
+<h3>Filesize Breakdown</h3>
+<h4>Shows the Line-count of Each File</h4>
+<h5>This is the breakdown for the Red Ocelot  files.</h5>
+<div class="chart-container">
+    <canvas id="<?php echo $view->here ?>filesize"></canvas>
+</div>
+
+<script>
+    // Parse PHP-generated JSON data
+    var chartData = <?php echo $fileSizedataJSON; ?>;
+
+    // Set up Chart.js
+    var ctx = document.getElementById('<?php echo $view->here?>filesize').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: chartData.map(item => item.data),
+            }],
+            labels: chartData.map(item => item.label),
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>
+
+<?php
+// Include necessary files classes
+require_once('Models/files.php');
+require_once('Models/filesDataSet.php');
+
+// Instantiate filesDataSet
+$filesData = new Models\filesDataSet();
+
+// Fetch all files from the database
+$allFiles = $filesData->fetchFilesBySize();
+
+// Prepare data for the file line count chart
+$fileSizeChartData = [
+'labels' => [],
+'datasets' => [
+[
+'label' => 'Line Counts',
+'data' => [],
+],
+],
+];
+
+foreach ($allFiles as $file) {
+// Assuming you want to include only files, not directories
+if (!$file->getIsDirectory()) {
+$fileSizeChartData['labels'][] = $file->getName();
+$fileSizeChartData['datasets'][0]['data'][] = $file->getLineCount();
+    }
+}
+
+// Convert file size data to JSON
+$fileSizedataJSON = json_encode($fileSizeChartData);
+?>
+
+<script>
+    // Parse PHP-generated JSON data for file sizes
+    var fileSizeChartData = <?php echo $fileSizedataJSON; ?>;
+
+    // Set up Chart.js for file size breakdown
+    var fileSizeCtx = document.getElementById('<?php echo $view->here?>filesize').getContext('2d');
+    var myFileSizeChart = new Chart(fileSizeCtx, {
+        type: 'pie',
+        data: fileSizeChartData,
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'File Size Breakdown'
+            }
+        }
+    });
+</script>

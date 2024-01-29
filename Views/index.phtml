@@ -1,0 +1,20 @@
+<?php require('template/header.phtml') ?>
+
+    <div class="row">
+        <!-- Data From Database -->
+        <div class="col-md-6">
+            <!-- Gets view -->
+            <?php $view->here = "db";
+            require('template/redOcelotData.phtml') ?>
+        </div>
+
+        <!-- Data to Compare to -->
+        <div class="col-md-6">
+            <!-- TODO: File needs creating for open baraza data -->
+            <?php $view->here = "comp";
+            require('template/openBarazaData.phtml') ?>
+        </div>
+    </div>
+
+
+<?php require('template/footer.phtml') ?>

@@ -1,0 +1,39 @@
+<?php require('template/header.phtml') ?>
+
+<!-- Section for Displaying Commit Messages -->
+<div class="table-responsive">
+    <h2>Existing Commit Messages for Red Ocelot</h2>
+    <table class="table">
+        <!-- Table Headers -->
+        <thead>
+        <tr>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Commit Messages</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- PHP Loop to Display Each Commit Message -->
+        <?php if (isset($view->commitDataSet) && is_array($view->commitDataSet)): ?>
+            <?php foreach ($view->commitDataSet as $commit): ?>
+                <tr>
+                    <!-- Displaying details of each commit message -->
+                    <td><?= htmlspecialchars($commit->getUsername()) ?></td>
+                    <td><?= htmlspecialchars($commit->getDate()) ?></td>
+                    <td><?= htmlspecialchars($commit->getMessage()) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <!-- Message Displayed if No Commit Messages are Available -->
+            <tr>
+                <td colspan="1">No commit messages available.</td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination Section -->
+<?php require('Views/template/pagination.phtml'); ?>
+
+<?php require('template/footer.phtml') ?>
